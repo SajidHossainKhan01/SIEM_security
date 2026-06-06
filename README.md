@@ -372,15 +372,4 @@ siem-security-labs/
 
 ---
 
-## Team RASD
-
-| Name | Roll |
-|------|------|
-| Jannatul Ferdaus | 70011 |
-| Rokeya Samanta Ruhee | 70057 |
-| Sayma Mahmud | 70030 |
-| Md. Nur-E-Alam | 70033 |
-
----
-
 > ⚠️ **Disclaimer:** All attack simulations in this repository are conducted in isolated virtual lab environments for educational purposes only. Never run these techniques against systems you do not own or have explicit written permission to test.
