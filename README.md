@@ -1,7 +1,7 @@
 # SIEM Security Labs — CSE804: Network and Internet Security
 
 > **University of Dhaka — Professional Masters in Information and Cyber Security**  
-> Course: CSE804 · Team RASD
+> Course: CSE804
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange.svg)]()
