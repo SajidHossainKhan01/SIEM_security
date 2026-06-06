@@ -1,0 +1,17 @@
+# =============================================================================
+# suricata_rule_path.yaml
+# Snippet to add to /etc/suricata/suricata.yaml
+# This registers the custom darkgate.rules file under the default rule-files
+# section of your Suricata configuration.
+#
+# USAGE:
+#   1. Copy darkgate.rules to /var/lib/suricata/rules/
+#   2. Add the entry below under the `rule-files:` key in suricata.yaml
+#   3. Test: sudo suricata -T -c /etc/suricata/suricata.yaml -v
+#   4. Reload: sudo systemctl restart suricata
+# =============================================================================
+
+# Paste this block into /etc/suricata/suricata.yaml under rule-files:
+rule-files:
+  - suricata.rules           # default Suricata community rules
+  - darkgate.rules           # custom DarkGate malware detection rules

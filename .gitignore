@@ -1,0 +1,48 @@
+# =============================================================================
+# .gitignore — siem-security-labs
+# =============================================================================
+
+# NEVER commit these — contains real credentials / payloads
+*.exe
+*.msi
+*.bin
+*.raw
+rasd.exe
+*.pcap
+*.pcapng
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+
+# Credentials
+*.pass
+*.secret
+credentials.txt
+.env.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs (keep structure, not content)
+*.log
+logs/
+
+# Temporary
+*.tmp
+*.bak
+/tmp/
