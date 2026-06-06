@@ -50,7 +50,7 @@ A hands-on security operations centre (SOC) lab covering three real-world threat
 
 ```bash
 # Clone this repository
-git clone https://github.com/<your-username>/siem-security-labs.git
+git clone https://github.com/SajidHossainKhan01/siem-security-labs.git
 cd siem-security-labs
 
 # Deploy the SOC stack (Elasticsearch + Kibana + Filebeat + Suricata + Wazuh)
